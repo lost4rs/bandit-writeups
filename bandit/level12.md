@@ -2,7 +2,7 @@
 ## Objective: Find the password stored in _data.txt_  
 From the instructions provided, we know that _data.txt_ is a **hexdump** file that has been repeatedly compressed.  
 
-## Our tools ⚒️
+## Tools ⚒️
 `mkdir` <!--(or `mmktemp -d`)--> and `cp`: To work in a temporary folder (important for security and organization!).  
 `xxd`: To convert the file to binary.  
 `file`: To identify the file type.  
