@@ -19,7 +19,7 @@ mkdir /tmp/workspace-bandit12
 Then, copy *data.txt* to your personal folder and move there.  
 ```bash
 cp data.txt /tmp/workspace-bandit12
-cd /tmp/workspace
+cd /tmp/workspace-bandit12
 ```  
 
 **Reverting the Hexdump**  
@@ -32,7 +32,7 @@ xxd -r data.txt > databin
 I used the `file` command to see what I was dealing with and then apply the correct tool.  
 ★☆ Pro Tip: Instead of overwriting the same file, I redirected the output at each step (e.g., data1, data2, data3). This way, if I made a mistake, I didn't have to start from the very beginning.  
 * **Layer 1:** Identified as *gzip* compressed data.  
-We find out the file type, since it's a **gzip**, we rename it so the tool recognizes it and decompress it:  
+After identifying the file type as **gzip**, we rename it so the tool recognizes it and decompress it:  
 `mv databin data1.gz && zcat data1.gz > data2`  
 * **Layer 2:** Identified as *bzip2* compressed data.   
 `bzcat data2 > data3`  
@@ -40,7 +40,7 @@ We find out the file type, since it's a **gzip**, we rename it so the tool recog
 `mv data3 data3.gz && zcat data3.gz > data4`  
 * **Layer 4:** Identified as POSIX *tar* archive.  
 `tar -xf data4`  
-Obs: Since we cannot redirect the decompressed file with `tar-xf`, I used `ls -t` to find the extracted file.
+Obs: Since we cannot redirect the decompressed file with `tar -xf`, I used `ls -t` to find the extracted file.
 * **Layer 5:** Identified as POSIX *tar* archive.  
 `tar -xf data5.bin`  
 * **Layer 6:** Identified as *bzip2* compressed data.   
@@ -53,10 +53,10 @@ Obs: Since we cannot redirect the decompressed file with `tar-xf`, I used `ls -t
 The final extraction revealed an **ASCII text** file containing the password for Level13.  
 Finally, using `cat` on that last file revealed the password!  
 
-## My biggest stumbles     
+## My biggest challenges     
 I ran into 2 problems...  
 1. I didn't know about the `.gz` requirement at first, so I got stuck there. Then I understood the functionality of this command and applied it correctly.  
-2. `tar -xf` was really a headache. I tried to redirect `tar -xf` with `>`, but I only got empty files. I had to learn that `tar -xf` extracts files directly to the disk instead of sending them to "standard output".  
+2. `tar -xf` was really a headache. I tried to redirect `tar -xf` with `>`, but I only got empty files because `tar` extracts files directly to the disk instead of sending them to "standard output".  
 
 ## Conclusions: Lessons learned ✨ 
 * Don't trust extensions: In this level, files don't have names like .zip or .tar. I learned to rely 100% on the `file` command. It’s like looking at the DNA of the file instead of just the label.
